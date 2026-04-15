@@ -6,7 +6,6 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddSingleton<MailSender>();
-        services.AddHostedService<FlightUpdateConsumer>();
     })
     .Build();
 

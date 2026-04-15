@@ -10,32 +10,31 @@
   "bruteForceProtected": true,
   "accessTokenLifespan": 86400,
   "ssoSessionMaxLifespan": 86400,
-
   "roles": {
     "realm": [
       {
         "name": "Admin",
-        "description": "Full administrative access — manage flights, gates, and users",
+        "description": "Full administrative access \u2014 manage flights, gates, and users",
         "composite": false,
         "clientRole": false
       },
       {
         "name": "Staff",
-        "description": "Operational access — create and update flights and gates",
+        "description": "Operational access \u2014 create and update flights and gates",
         "composite": false,
         "clientRole": false
       },
       {
         "name": "Passenger",
-        "description": "Standard user — book/follow flights",
+        "description": "Standard user \u2014 book/follow flights",
         "composite": false,
         "clientRole": false
       }
     ]
   },
-
-  "defaultRoles": ["Passenger"],
-
+  "defaultRoles": [
+    "Passenger"
+  ],
   "clients": [
     {
       "clientId": "airport-api",
@@ -68,7 +67,9 @@
         "http://localhost:3000/*",
         "http://localhost:4200/*"
       ],
-      "webOrigins": ["+"],
+      "webOrigins": [
+        "+"
+      ],
       "attributes": {
         "access.token.lifespan": "86400",
         "pkce.code.challenge.method": "S256"
@@ -91,7 +92,6 @@
       ]
     }
   ],
-
   "users": [
     {
       "username": "admin@airport.local",
@@ -101,9 +101,16 @@
       "firstName": "Airport",
       "lastName": "Admin",
       "credentials": [
-        { "type": "password", "value": "Admin1234!", "temporary": false }
+        {
+          "type": "password",
+          "value": "Admin1234!",
+          "temporary": false
+        }
       ],
-      "realmRoles": ["Admin", "Passenger"]
+      "realmRoles": [
+        "Admin",
+        "Passenger"
+      ]
     },
     {
       "username": "staff@airport.local",
@@ -113,9 +120,29 @@
       "firstName": "Airport",
       "lastName": "Staff",
       "credentials": [
-        { "type": "password", "value": "Staff1234!", "temporary": false }
+        {
+          "type": "password",
+          "value": "Staff1234!",
+          "temporary": false
+        }
       ],
-      "realmRoles": ["Staff", "Passenger"]
+      "realmRoles": [
+        "Staff",
+        "Passenger"
+      ]
+    },
+    {
+      "username": "service-account-airport-api",
+      "enabled": true,
+      "serviceAccountClientId": "airport-api",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "query-users",
+          "view-users",
+          "manage-realm"
+        ]
+      }
     }
   ]
 }

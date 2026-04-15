@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/AirportSystem.API.props" />
-</Project>

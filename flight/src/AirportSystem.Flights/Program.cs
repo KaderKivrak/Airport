@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // ── Services ──────────────────────────────────────────────────────────────────
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDatabase(builder.Configuration);
-builder.Services.AddKeycloakAuthentication(builder.Configuration);
+builder.Services.AddGatewayAuthentication();
 builder.Services.AddApplicationServices();
 builder.Services.AddGraphQLConfiguration();
 
