@@ -1,14 +1,13 @@
 using Notification;
 
+
 class Program
 {
     static async Task Main(string[] args)
     {
         Console.WriteLine("Starter notification service...");
 
-       
-
-        string fromEmail = "jeso0005@stud.ek.dk";
+        string fromEmail = "";
         string fromName = "School Notification Service";
 
         string toEmail = "dehli11111@gmail.com";
@@ -17,25 +16,10 @@ class Program
 
         MailSender mailSender = new MailSender();
 
-        try
+        RabbitMq rabbitMQ = new();
+        while (true)
         {
-            await mailSender.SendEmailAsync(
-                fromEmail,
-                fromName,
-                toEmail,
-                subject,
-                body
-            );
-
-            Console.WriteLine("Mail sendt!");
+            rabbitMQ.StartAsync().GetAwaiter().GetResult();
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Fejl ved afsendelse:");
-            Console.WriteLine(ex.Message);
-        }
-
-        Console.WriteLine("Tryk på en tast for at afslutte...");
-        Console.ReadKey();
     }
 }
