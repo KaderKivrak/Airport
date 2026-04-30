@@ -110,6 +110,22 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+  
+  payment:
+    build:
+      context: ./PaymentService
+      dockerfile: Dockerfile
+    container_name: airport_payment
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      PORT: "3000"
+      RABBITMQ_URL: "amqp://guest:guest@rabbitmq:5672"
+      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   gateway:
     build:

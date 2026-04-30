@@ -27,8 +27,8 @@ const stripeCheckout = async (req, res) => {
           quantity: 1
         }
       ],
-      success_url: `http://localhost:3000/api/payment/stripe/success/${flightID}`,
-      cancel_url: `http://localhost:3000/api/payment/stripe/cancel/${flightID}`
+      success_url: `http://localhost:3001/api/payment/stripe/success/${flightID}`,
+      cancel_url: `http://localhost:3001/api/payment/stripe/cancel/${flightID}`
     });
 
     res.status(200).json({ url: session.url });
