@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookingService.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20260403105347_InitialCreate")]
+    [Migration("20260430120037_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace BookingService.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -105,7 +105,6 @@ namespace BookingService.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("SeatNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
