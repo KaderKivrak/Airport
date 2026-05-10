@@ -18,14 +18,8 @@ public class RabbitMqIntegrationTests : IAsyncLifetime
     public async Task InitializeAsync()
     {
         var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>
-            {
-                { "RabbitMQ:Host", "localhost" },
-                { "RabbitMQ:Port", "5672" },
-                { "RabbitMQ:Username", "guest" },
-                { "RabbitMQ:Password", "guest" },
-                { "DisableMessaging", "false" }
-            })
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
         _publisher = new BookingEventPublisher();
@@ -33,10 +27,10 @@ public class RabbitMqIntegrationTests : IAsyncLifetime
 
         var factory = new ConnectionFactory
         {
-            HostName = "localhost",
-            Port = 5672,
-            UserName = "guest",
-            Password = "guest"
+            HostName = configuration["RabbitMQ:Host"],
+            Port = int.Parse(configuration["RabbitMQ:Port"]!),
+            UserName = configuration["RabbitMQ:Username"],
+            Password = configuration["RabbitMQ:Password"]
         };
 
         _consumerConnection = await factory.CreateConnectionAsync("rabbitmq-integration-test");
