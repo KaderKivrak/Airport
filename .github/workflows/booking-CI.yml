@@ -10,9 +10,50 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  blackbox-tests:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore BookingService.Tests/BookingService.Tests.csproj
+
+      - name: Build
+        run: dotnet build BookingService.Tests/BookingService.Tests.csproj --no-restore -p:WarningLevel=0
+
+      - name: Run blackbox tests
+        run: dotnet test BookingService.Tests/BookingService.Tests.csproj --no-build --verbosity normal --filter "FullyQualifiedName~Blackbox"
+
+  whitebox-tests:
+    runs-on: ubuntu-latest
+    needs: blackbox-tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore BookingService.Tests/BookingService.Tests.csproj
+
+      - name: Build
+        run: dotnet build BookingService.Tests/BookingService.Tests.csproj --no-restore -p:WarningLevel=0
+
+      - name: Run whitebox tests
+        run: dotnet test BookingService.Tests/BookingService.Tests.csproj --no-build --verbosity normal --filter "FullyQualifiedName~Whitebox"
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: whitebox-tests
     services:
       postgres:
         image: postgres:16
@@ -27,7 +68,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
       rabbitmq:
         image: rabbitmq:3-management
         env:
@@ -40,7 +80,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,10 +93,7 @@ jobs:
         run: dotnet restore BookingService.Tests/BookingService.Tests.csproj
 
       - name: Build
-        run: dotnet build BookingService.Tests/BookingService.Tests.csproj --no-restore
-
-      - name: Run unit tests
-        run: dotnet test BookingService.Tests/BookingService.Tests.csproj --no-build --verbosity normal --filter "FullyQualifiedName~Blackbox|FullyQualifiedName~Whitebox"
+        run: dotnet build BookingService.Tests/BookingService.Tests.csproj --no-restore -p:WarningLevel=0
 
       - name: Run integration tests
         run: dotnet test BookingService.Tests/BookingService.Tests.csproj --no-build --verbosity normal --filter "FullyQualifiedName~Integration"
