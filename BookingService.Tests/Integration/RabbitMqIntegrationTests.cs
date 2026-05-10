@@ -106,3 +106,5 @@ public class RabbitMqIntegrationTests : IAsyncLifetime
         _publisher.Dispose();
     }
 }
+
+//pipeline trigger
